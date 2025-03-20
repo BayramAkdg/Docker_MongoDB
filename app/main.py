@@ -13,8 +13,10 @@ class LibraryApp:
         """Run the Library Management System."""
         while True:
             choice = self.utility.show_menu()
+            
             if choice == "5":
                 self.db.close()
+                
                 break
             self.utility.handle_choice(choice, self.book_manager)
 
