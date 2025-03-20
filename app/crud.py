@@ -1,34 +1,33 @@
-from apps.database import get_database, close_connection
+from database import Database
 
-db, client = get_database()
-collection = db["books"]
+class BookManager:
+    def __init__(self):
+        self.db = Database()
 
-def add_book():
-    title = input("Kitap adı: ")
-    author = input("Yazar: ")
-    year = int(input("Yıl: "))
-    pages = int(input("Sayfa sayısı: "))
+    def add_book(self, kitap_adi, yazar, yayin_yili, sayfa_sayisi):
+        self.db.insert({
+            "kitap_adi": kitap_adi,
+            "yazar": yazar,
+            "yayin_yili": yayin_yili,
+            "sayfa_sayisi": sayfa_sayisi
+        })
+        print("Kitap eklendi!")
 
-    collection.insert_one({"title": title, "author": author, "year": year, "pages": pages})
-    print("Kitap eklendi!")
+    def list_books(self):
+        books = self.db.find_all()
+        if not books:
+            print("Kütüphanede hiç kitap yok.")
+        for idx, book in enumerate(books, start=1):
+            print(f"{idx}. Kitap Adı: {book['kitap_adi']}, Yazar: {book['yazar']}, Yayın Yılı: {book['yayin_yili']}, Sayfa Sayısı: {book['sayfa_sayisi']}")
 
-def get_books():
-    print("\n Kütüphanedeki Kitaplar:")
-    for idx, book in enumerate(collection.find(), start=1):
-        print(f"ID: {idx}, Kitap Adı: {book['title']}, Yazar: {book['author']}, Yıl: {book['year']}, Sayfa Sayısı: {book['pages']}")
+    def update_book(self, kitap_adi, yeni_yazar, yeni_yayin_yili, yeni_sayfa_sayisi):
+        self.db.update({"kitap_adi": kitap_adi}, {
+            "yazar": yeni_yazar,
+            "yayin_yili": yeni_yayin_yili,
+            "sayfa_sayisi": yeni_sayfa_sayisi
+        })
+        print("Kitap güncellendi!")
 
-def update_book():
-    title = input("Güncellenecek kitap adı: ")
-    new_author = input("Yeni yazar: ")
-    new_year = int(input("Yeni yıl: "))
-    new_pages = int(input("Yeni sayfa sayısı: "))
-
-    collection.update_one({"title": title}, {"$set": {"author": new_author, "year": new_year, "pages": new_pages}})
-    print("Kitap güncellendi!")
-
-def delete_book():
-    title = input("Silinecek kitap adı: ")
-    collection.delete_one({"title": title})
-    print("Kitap silindi!")
-
-close_connection(client)
+    def delete_book(self, kitap_adi):
+        self.db.delete({"kitap_adi": kitap_adi})
+        print("Kitap silindi!")
