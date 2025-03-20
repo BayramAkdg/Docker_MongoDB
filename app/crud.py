@@ -24,6 +24,7 @@ class BookManager:
                 print("Failed to add book.")
                 
                 return "Failed to add book."
+                
         except PyMongoError as e:
             print(f"Error adding book: {e}")
             
@@ -38,6 +39,7 @@ class BookManager:
                 print(f"Listing {len(books)} books.")
                 
                 return books
+                
             else:
                 print("No books found in the library.")
                 
@@ -60,6 +62,7 @@ class BookManager:
                 print(f"Book updated: {title} -> {new_author}, {new_year}, {new_pages} pages.")
                 
                 return f"Book '{title}' updated."
+                
             else:
                 print(f"Book with title '{title}' not found.")
                 
@@ -79,10 +82,13 @@ class BookManager:
                 print(f"Book deleted: {title}")
                 
                 return f"Book '{title}' deleted."
+                
             else:
                 print(f"Book with title '{title}' not found.")
                 
                 return f"Book with title '{title}' not found."
+                
         except PyMongoError as e:
             print(f"Error deleting book: {e}")
+            
             return f"Error deleting book: {e}"
