@@ -5,4 +5,5 @@ def show_menu():
     print("3. Kitap Güncelle")
     print("4. Kitap Sil")
     print("5. Çıkış")
+    
     return input("Seçiminiz: ").strip()
